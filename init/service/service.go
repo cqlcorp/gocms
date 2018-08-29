@@ -1,21 +1,22 @@
 package service
 
 import (
-	"github.com/gocms-io/gocms/context"
-	"github.com/gocms-io/gocms/domain/acl/access_control/access_control_service"
-	"github.com/gocms-io/gocms/domain/acl/authentication/authentication_service"
-	"github.com/gocms-io/gocms/domain/acl/permissions/permissions_service"
-	"github.com/gocms-io/gocms/domain/email/email_service"
-	"github.com/gocms-io/gocms/domain/health/health_service"
-	"github.com/gocms-io/gocms/domain/mail/mail_service"
-	"github.com/gocms-io/gocms/domain/plugin/plugin_services"
-	"github.com/gocms-io/gocms/domain/setting/setting_service"
-	"github.com/gocms-io/gocms/domain/user/user_service"
-	"github.com/gocms-io/gocms/init/database"
-	"github.com/gocms-io/gocms/init/repository"
-	"github.com/gocms-io/gocms/utility/log"
+	"github.com/myanrichal/gocms/context"
+	"github.com/myanrichal/gocms/domain/acl/access_control/access_control_service"
+	"github.com/myanrichal/gocms/domain/acl/authentication/authentication_service"
+	"github.com/myanrichal/gocms/domain/acl/permissions/permissions_service"
+	"github.com/myanrichal/gocms/domain/email/email_service"
+	"github.com/myanrichal/gocms/domain/health/health_service"
+	"github.com/myanrichal/gocms/domain/mail/mail_service"
+	"github.com/myanrichal/gocms/domain/plugin/plugin_services"
+	"github.com/myanrichal/gocms/domain/setting/setting_service"
+	"github.com/myanrichal/gocms/domain/user/user_service"
+	"github.com/myanrichal/gocms/domain/logs/log_service"
+	"github.com/myanrichal/gocms/init/database"
+	"github.com/myanrichal/gocms/init/repository"
+	"github.com/myanrichal/gocms/utility/log"
 	"time"
-	"github.com/gocms-io/gocms/domain/acl/group/group_service"
+	"github.com/myanrichal/gocms/domain/acl/group/group_service"
 )
 
 type ServicesGroup struct {
@@ -29,6 +30,7 @@ type ServicesGroup struct {
 	EmailService      email_service.IEmailService
 	PluginsService    plugin_services.IPluginsService
 	HealthService     health_service.IHealthService
+	LogService		  log_service.ILogService
 }
 
 func DefaultServicesGroup(repositoriesGroup *repository.RepositoriesGroup, db *database.Database) *ServicesGroup {
@@ -68,6 +70,7 @@ func DefaultServicesGroup(repositoriesGroup *repository.RepositoriesGroup, db *d
 	} else {
 		pluginRelatedErr = pluginsService.StartPluginsService()
 	}
+	logService := log_service.DefaultLogService(repositoriesGroup)
 
 	// heath service
 	healthService := health_service.DefaultHealthService(db, pluginsService)
@@ -83,6 +86,7 @@ func DefaultServicesGroup(repositoriesGroup *repository.RepositoriesGroup, db *d
 		EmailService:      emailService,
 		PluginsService:    pluginsService,
 		HealthService:     healthService,
+		LogService: 	   logService,
 	}
 
 	return sg

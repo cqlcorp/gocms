@@ -1,22 +1,24 @@
 package health_controller
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gocms-io/gocms/init/service"
-	"github.com/gocms-io/gocms/routes"
-	"github.com/gocms-io/gocms/utility/errors"
+	"fmt"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/myanrichal/gocms/init/service"
+	"github.com/myanrichal/gocms/routes"
+	"github.com/myanrichal/gocms/utility/errors"
 )
 
 type InternalHealthController struct {
-	internalRoutes       *routes.InternalRoutes
-	serviceGroup *service.ServicesGroup
+	internalRoutes *routes.InternalRoutes
+	serviceGroup   *service.ServicesGroup
 }
 
 func DefaultInternalHealthController(iRoutes *routes.InternalRoutes, serviceGroup *service.ServicesGroup) *InternalHealthController {
 	ihc := &InternalHealthController{
-		internalRoutes:       iRoutes,
-		serviceGroup: serviceGroup,
+		internalRoutes: iRoutes,
+		serviceGroup:   serviceGroup,
 	}
 
 	ihc.DefaultInternal()
@@ -43,6 +45,8 @@ func (hc *InternalHealthController) internalHealth(c *gin.Context) {
 		errors.Response(c, http.StatusInternalServerError, msg, nil)
 		return
 	}
+
+	fmt.Print("\ninternal_health_controler\n")
 
 	c.Status(http.StatusOK)
 }
