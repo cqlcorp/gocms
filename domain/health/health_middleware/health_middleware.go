@@ -58,7 +58,6 @@ func (hm *HealthMiddleware) CheckForErrors() gin.HandlerFunc {
 //middleware activity
 func (hm *HealthMiddleware) errorMiddleware(c *gin.Context) {
 	//setup writer
-	fmt.Println("try middleware")
 	blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 	c.Writer = blw
 
