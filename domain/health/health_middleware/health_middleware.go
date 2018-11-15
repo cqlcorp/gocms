@@ -43,8 +43,6 @@ func (w bodyLogWriter) Write(b []byte) (int, error) {
 //ApplyHealthToRoutes apply Middleware on startup
 //Connect middleware to routes
 func (hm *HealthMiddleware) ApplyHealthToRoutes(routes *routes.Routes) {
-	//setup as auth route only
-	// todo: SHOULD APPLY ON ALL ROUTES
 	routes.Auth.Use(hm.CheckForErrors())
 	routes.Public.Use(hm.CheckForErrors())
 	routes.Root.Use(hm.CheckForErrors())
@@ -58,7 +56,6 @@ func (hm *HealthMiddleware) CheckForErrors() gin.HandlerFunc {
 //middleware activity
 func (hm *HealthMiddleware) errorMiddleware(c *gin.Context) {
 	//setup writer
-	fmt.Println("try middleware")
 	blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 	c.Writer = blw
 

@@ -1,10 +1,11 @@
 package log_repository
 
 import (
-	"github.com/cqlcorp/gocms/domain/logs/log_model"
-	"github.com/jmoiron/sqlx"
 	"database/sql"
 	"fmt"
+
+	"github.com/cqlcorp/gocms/domain/logs/log_model"
+	"github.com/jmoiron/sqlx"
 )
 
 type ILogRepository interface {
@@ -18,7 +19,7 @@ type LogRepository struct {
 }
 
 func DefaultLogRepository(dbx *sqlx.DB) *LogRepository {
-	logRepository := &LogRepository {
+	logRepository := &LogRepository{
 		database: dbx,
 	}
 	return logRepository
@@ -28,7 +29,7 @@ func (lr *LogRepository) RecordError(record *log_model.ErrorLog) error {
 	_, err := lr.database.NamedExec(`
 	INSERT INTO gocms_error_logs (route, status, body, date)
 		VALUES (:route, :status, :body, :date)
-	`, record);
+	`, record)
 	if err != nil {
 		return err
 	}
@@ -38,7 +39,7 @@ func (lr *LogRepository) RecordError(record *log_model.ErrorLog) error {
 func (lr *LogRepository) RecentError(route string) (*log_model.ErrorLog, error) {
 	var lastLog log_model.ErrorLog
 	err := lr.database.Get(&lastLog, `
-	SELECT * FROM gocms_error_logs 
+	SELECT * FROM gocms_error_logs
 	WHERE route = ?
 	ORDER BY date desc
 	LIMIT 1;
@@ -51,11 +52,10 @@ func (lr *LogRepository) RecentError(route string) (*log_model.ErrorLog, error) 
 	return &lastLog, nil
 }
 
-
 func (lr *LogRepository) GetLastError() (*log_model.ErrorLog, error) {
 	var lastLog log_model.ErrorLog
 	err := lr.database.Get(&lastLog, `
-	SELECT * FROM gocms_error_logs 
+	SELECT * FROM gocms_error_logs
 	ORDER BY date desc
 	LIMIT 1;
 	`)

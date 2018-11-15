@@ -4,9 +4,10 @@ import (
 	// "github.com/cqlcorp/gocms/utility"
 	"github.com/cqlcorp/gocms/domain/logs/log_model"
 	// "github.com/cqlcorp/gocms/utility/errors"
-	"github.com/cqlcorp/gocms/init/repository"
 	"time"
+
 	"github.com/cqlcorp/gocms/context"
+	"github.com/cqlcorp/gocms/init/repository"
 )
 
 type ILogService interface {
@@ -19,8 +20,8 @@ type LogService struct {
 	RepositoriesGroup *repository.RepositoriesGroup
 }
 
-func DefaultLogService(rg *repository.RepositoriesGroup) *LogService{
-	logService := &LogService {
+func DefaultLogService(rg *repository.RepositoriesGroup) *LogService {
+	logService := &LogService{
 		RepositoriesGroup: rg,
 	}
 	return logService
@@ -44,7 +45,7 @@ func (ls *LogService) GetLastError() (*log_model.ErrorLog, error) {
 }
 
 func (ls *LogService) RecentError(record *log_model.ErrorLog) (bool, error) {
-	
+
 	lastError, err := ls.RepositoriesGroup.LogRepository.RecentError(record.Route)
 	if err != nil {
 		return false, err
