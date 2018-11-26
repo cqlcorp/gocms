@@ -53,13 +53,13 @@ func (ls *LogService) RecentError(record *log_model.ErrorLog) (bool, error) {
 
 	interval := lastError.Time.Add(time.Minute * time.Duration(context.Config.DbVars.ErrorReportDelay))
 
+	err = ls.RepositoriesGroup.LogRepository.RecordError(record)
+	if err != nil {
+		return true, err
+	}
+
 	if time.Now().After(interval) {
 		//record the error its new and recent
-		err := ls.RepositoriesGroup.LogRepository.RecordError(record)
-		if err != nil {
-			return true, err
-		}
-
 		return true, nil
 	}
 	return false, nil
